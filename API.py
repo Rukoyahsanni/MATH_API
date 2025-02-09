@@ -1,7 +1,7 @@
 import json
 
 def is_armstrong(number):
-    digits = [int(digit) for digit in str(abs(int(number)))]  # Ensure it works for negative numbers
+    digits = [int(digit) for digit in str(abs(int(number)))]  
     power = len(digits)
     return sum(d ** power for d in digits) == abs(int(number))
 
@@ -48,8 +48,11 @@ def lambda_handler(event, context):
         if number_str is None:
             return {
                 "statusCode": 400,
+                "headers": {"Content-Type": "application/json"},
                 "body": json.dumps({
-                    "error": "Missing 'number' parameter"
+                    "error": True,
+                    "message": "Missing 'number' parameter",
+                    "number": None
                 })
             }
 
@@ -59,8 +62,11 @@ def lambda_handler(event, context):
         except ValueError:
             return {
                 "statusCode": 400,
+                "headers": {"Content-Type": "application/json"},
                 "body": json.dumps({
-                    "error": "Invalid number format"
+                    "error": True,
+                    "message": "Invalid number format",
+                    "number": number_str
                 })
             }
 
@@ -69,11 +75,14 @@ def lambda_handler(event, context):
 
         return {
             "statusCode": 200,
+            "headers": {"Content-Type": "application/json"},
             "body": json.dumps(result)
         }
 
     except Exception as e:
         return {
             "statusCode": 500,
-            "body": json.dumps({"error": str(e)})
+            "headers": {"Content-Type": "application/json"},
+            "body": json.dumps({"error": True, "message": str(e)})
         }
+v
