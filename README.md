@@ -1,7 +1,35 @@
 # Number Classification API
 
 ## Overview
-This API provides information about a given number, including its properties such as being prime, perfect, Armstrong, even/odd classification, and a fun fact about it.
+This is a simple **Number Classification API** built using **AWS Lambda** and **API Gateway**. It classifies numbers based on specific criteria and provides responses accordingly.
+
+---
+
+## 🚀 About This Project  
+
+This project utilizes **AWS Lambda** for serverless execution and **API Gateway** for managing HTTP requests. It is designed to efficiently handle number classification logic with minimal infrastructure management.
+
+### **Key Features**
+- 📌 Serverless architecture using AWS Lambda
+- 🌍 API exposed via AWS API Gateway
+- ⚡ Fast and scalable number classification
+
+---
+
+## 🔧 Technologies & Resources Used  
+- **AWS Lambda** – Serverless function execution  
+- **AWS API Gateway** – HTTP request handling  
+- **Python** – Core programming language  
+
+---
+
+## 🛠️ Setup & Deployment  
+
+### **1️⃣ Clone the repository**  
+```sh
+git clone https://github.com/Rukoyahsanni/MATH_API.git
+cd MATH_API
+
 
 ## Endpoint
 ```
