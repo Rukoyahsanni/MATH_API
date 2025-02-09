@@ -1,47 +1,46 @@
 import json
 
 def is_armstrong(number):
-    digits = [int(digit) for digit in str(abs(int(number)))]  
+    number = abs(int(number))  # Ensure it's an integer
+    digits = [int(d) for d in str(number)]
     power = len(digits)
-    return sum(d ** power for d in digits) == abs(int(number))
+    return sum(d ** power for d in digits) == number
 
 def is_prime(number):
-    number = int(number)
-    if number < 2:
+    if number < 2:  
         return False
+    number = int(number)
     for i in range(2, int(number ** 0.5) + 1):
         if number % i == 0:
             return False
     return True
 
 def is_perfect(number):
+    if number < 1:  
+        return False
     number = int(number)
-    return sum(i for i in range(1, number) if number % i == 0) == number
+    return sum(i for i in range(1, number // 2 + 1) if number % i == 0) == number
 
 def number_properties(number):
-    properties = []
+    properties = ["odd" if int(number) % 2 != 0 else "even"]
     
     if is_armstrong(number):
         properties.append("armstrong")
-    if int(number) % 2 != 0:
-        properties.append("odd")
-    else:
-        properties.append("even")
 
     return {
         "number": number,
         "is_prime": is_prime(number),
         "is_perfect": is_perfect(number),
         "properties": properties,
-        "class_sum": sum(int(digit) for digit in str(abs(int(number)))),
-        "fun_fact": "{} is an Armstrong number because {}".format(
-            number, " + ".join([f"{d}^{len(str(int(number)))}" for d in str(abs(int(number)))])
+        "class_sum": sum(int(d) for d in str(abs(int(number)))),
+        "fun_fact": (
+            f"{number} is an Armstrong number because " + 
+            " + ".join([f"{d}^{len(str(int(number)))}" for d in str(abs(int(number)))])
         ) if is_armstrong(number) else "No special fun fact"
     }
 
 def lambda_handler(event, context):
     try:
-        # Extract number from query string
         query_params = event.get("queryStringParameters", {})
         number_str = query_params.get("number")
 
@@ -49,25 +48,16 @@ def lambda_handler(event, context):
             return {
                 "statusCode": 400,
                 "headers": {"Content-Type": "application/json"},
-                "body": json.dumps({
-                    "error": True,
-                    "message": "Missing 'number' parameter",
-                    "number": None
-                })
+                "body": json.dumps({"error": True, "message": "Missing 'number' parameter"})
             }
 
-        # Convert number to float first (to allow floating points)
         try:
-            number = float(number_str)
+            number = float(number_str)  # Ensure it's a valid number
         except ValueError:
             return {
                 "statusCode": 400,
                 "headers": {"Content-Type": "application/json"},
-                "body": json.dumps({
-                    "error": True,
-                    "message": "Invalid number format",
-                    "number": number_str
-                })
+                "body": json.dumps({"error": True, "message": "Invalid number format"})
             }
 
         # Compute number properties
@@ -76,7 +66,7 @@ def lambda_handler(event, context):
         return {
             "statusCode": 200,
             "headers": {"Content-Type": "application/json"},
-            "body": json.dumps(result)
+            "body": json.dumps({"success": True, **result})
         }
 
     except Exception as e:
@@ -85,4 +75,3 @@ def lambda_handler(event, context):
             "headers": {"Content-Type": "application/json"},
             "body": json.dumps({"error": True, "message": str(e)})
         }
-v
